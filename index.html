@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- EDIT: Change browser tab title -->
+  <title>For You</title>
+
+  <!-- EDIT: Change fonts here if you want -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* EDIT: Main colors and basic design */
+    :root {
+      --bg: #fff8f3;
+      --card: rgba(255, 255, 255, 0.82);
+      --text: #2f2430;
+      --muted: #6e6270;
+      --accent: #ff6b88;
+      --accent-dark: #e75472;
+      --yellow: #ffd166;
+      --blue: #dfe8ff;
+      --border: rgba(47, 36, 48, 0.12);
+      --shadow: 0 12px 32px rgba(75, 58, 72, 0.12);
+      --radius: 24px;
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 209, 102, 0.30), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(223, 232, 255, 0.9), transparent 28%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: #000;
+      color: #fff;
+      padding: 10px 14px;
+      z-index: 999;
+    }
+
+    .skip-link:focus {
+      left: 12px;
+      top: 12px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(255, 248, 243, 0.82);
+      border-bottom: 1px solid rgba(47, 36, 48, 0.06);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #ff9eb2, #ffd166);
+      color: white;
+      box-shadow: var(--shadow);
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(47, 36, 48, 0.08);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    .hero {
+      padding-top: 42px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .card,
+    .note-card,
+    .gallery-shell,
+    .final-card,
+    .about-card,
+    .mini-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .card,
+    .about-card,
+    .final-card,
+    .mini-card {
+      padding: 24px;
+    }
+
+    .gallery-shell {
+      padding: 24px;
+    }
+
+    .sticker {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #fff3a8;
+      transform: rotate(-3deg);
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 12px;
+      line-height: 1.12;
+      color: var(--text);
+    }
+
+    /* EDIT: Main heading style */
+    h1 {
+      font-family: 'Patrick Hand', cursive;
+      font-size: clamp(2.3rem, 5vw, 4.7rem);
+    }
+
+    /* EDIT: Section heading style */
+    h2 {
+      font-family: 'Patrick Hand', cursive;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+    }
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      max-width: 68ch;
+    }
+
+    .actions,
+    .answer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn,
+    .answer-btn {
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover,
+    .answer-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary,
+    .yes-btn {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 10px 22px rgba(255, 107, 136, 0.28);
+    }
+
+    .btn-primary:hover,
+    .yes-btn:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-secondary,
+    .maybe-btn {
+      background: white;
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .photo-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .polaroid {
+      background: white;
+      border-radius: 20px;
+      padding: 12px 12px 18px;
+      border: 1px solid rgba(47, 36, 48, 0.08);
+      box-shadow: 0 10px 24px rgba(47, 36, 48, 0.12);
+      transform: rotate(-2deg);
+    }
+
+    .polaroid:nth-child(2) {
+      transform: rotate(3deg);
+      margin-left: 22px;
+      background: #fff7fb;
+    }
+
+    .polaroid img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 14px;
+      background: #f2ece8;
+    }
+
+    .caption {
+      margin-top: 10px;
+      text-align: center;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.15rem;
+      color: #4e3d48;
+    }
+
+    .path-box {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #4f5b91;
+      background: rgba(223, 232, 255, 0.65);
+      border: 1px dashed rgba(79, 91, 145, 0.28);
+      border-radius: 12px;
+      padding: 10px 12px;
+      word-break: break-all;
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    .about-card {
+      background: linear-gradient(180deg, #fffef9, #fff8fc);
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .note-card {
+      padding: 22px;
+      background: linear-gradient(180deg, #fffef9, #fff4da);
+      transform: rotate(-1deg);
+    }
+
+    .note-card:nth-child(2) {
+      background: linear-gradient(180deg, #fffefe, #ffeef2);
+      transform: rotate(1.2deg);
+    }
+
+    .note-card:nth-child(3) {
+      background: linear-gradient(180deg, #fffefe, #eef3ff);
+      transform: rotate(-1.2deg);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr 0.85fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      min-height: 210px;
+      object-fit: cover;
+      border-radius: 18px;
+      background: #f1ece8;
+      border: 1px solid rgba(47, 36, 48, 0.08);
+    }
+
+    .gallery-item.tall {
+      grid-row: span 2;
+    }
+
+    .gallery-item.tall img {
+      min-height: 440px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 20px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 209, 102, 0.40);
+      margin-bottom: 10px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .final-card {
+      text-align: center;
+      padding: 36px 24px;
+      background:
+        radial-gradient(circle at top, rgba(255, 209, 102, 0.24), transparent 32%),
+        linear-gradient(180deg, #fff8fa, #fffdfb);
+    }
+
+    .question {
+      font-family: 'Patrick Hand', cursive;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.1;
+      max-width: 14ch;
+      margin: 16px auto;
+      color: var(--text);
+    }
+
+    .result,
+    .date-output {
+      min-height: 30px;
+      margin-top: 16px;
+      font-weight: 700;
+      color: #5a4758;
+    }
+
+    .date-plan {
+      margin-top: 24px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .date-plan h3 {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.4rem;
+    }
+
+    .date-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(47, 36, 48, 0.14);
+      background: white;
+      color: var(--text);
+      font: inherit;
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px 0 44px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .notes-grid,
+      .gallery-grid,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-item.tall {
+        grid-row: span 1;
+      }
+
+      .gallery-item.tall img {
+        min-height: 260px;
+      }
+
+      .polaroid:nth-child(2) {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        position: static;
+      }
+
+      section {
+        padding: 42px 0;
+      }
+
+      .container {
+        width: min(calc(100% - 20px), var(--max));
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .date-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">♡</div>
+        <!-- EDIT: Change this name -->
+        <span>For asmita</span>
+      </div>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#home">Start</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Photos</a>
+        <a href="#question">Question</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="card">
+          <!-- EDIT: Small top line -->
+          <div class="sticker">made with love</div>
+
+          <!-- EDIT: Main heading -->
+          <h1>Hey asmita,<br>I made this little page for you :)</h1>
+
+          <!-- EDIT: Main intro text -->
+          <p>
+            I did not want to say this in a boring way, so I thought making something small and honest would be better.
+            for the record it has taken my whole day .so i hope you would appreciate my love for you
+          </p>
+
+          <div class="actions">
+            <a class="btn btn-primary" href="#about">Read this first</a>
+            <a class="btn btn-secondary" href="#question">Go to the question</a>
+          </div>
+        </div>
+
+        <div class="photo-stack">
+          <figure class="polaroid">
+            <!-- EDIT: Change photo path -->
+            <img src="./photos/hero-1.jpg" alt="Main photo" width="600" height="750" loading="lazy">
+            <!-- EDIT: Change caption -->
+            <figcaption class="caption"></figcaption>
+            <div class="path-box">Photo path: ./photos/hero-1.jpg</div>
+          </figure>
+
+          <figure class="polaroid">
+            <!-- EDIT: Change photo path -->
+            <img src="./photos/hero-2.jpg" alt="Second photo" width="600" height="750" loading="lazy">
+            <!-- EDIT: Change caption -->
+            <figcaption class="caption"></figcaption>
+            <div class="path-box">Photo path: ./photos/hero-2.jpg</div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <h2>A little about me</h2>
+          <p>Short, simple, and honest.</p>
+        </div>
+
+        <article class="about-card">
+          <!-- EDIT: Replace this whole intro block with your own words -->
+          <p><strong>Hi, I’m Satyam.</strong></p>
+          <p>We may not know each other that well yet, but I’ve genuinely liked seeing you around and talking to you.</p>
+          <p>I study at IIT Bombay, and I’m originally from Bihar too, which made me feel a little more connected.</p>
+          <p>I know we haven’t known each other for very long, but I’d really like the chance to know you better.</p>
+          <p>So, if you’re comfortable, would you like to go out with me sometime?</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="notes">
+      <div class="container">
+        <div class="section-head">
+          <h2>Why I wanted to ask like this</h2>
+          <p>A small website felt more thoughtful than a random text.</p>
+        </div>
+
+        <div class="notes-grid">
+          <article class="note-card">
+            <!-- EDIT: Card 1 -->
+            <h3>This felt more honest</h3>
+            <p>I thought a small page would feel more genuine than trying to say everything perfectly in one random moment.</p>
+          </article>
+
+          <article class="note-card">
+            <!-- EDIT: Card 2 -->
+            <h3>You stayed in my mind</h3>
+            <p>Sometimes because of a smile, sometimes because of a small interaction, and somehow that stayed with me longer than expected.</p>
+          </article>
+
+          <article class="note-card">
+            <!-- EDIT: Card 3 -->
+            <h3>No pressure at all</h3>
+            <p>This is only me saying I would like to know you better. That is all. Simple and honest.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container gallery-shell">
+        <div class="section-head">
+          <h2>cuties photos</h2>
+          <p>my favourite person cutie photo</p>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="gallery-item tall">
+            <!-- EDIT: Gallery image 1 -->
+            <img src="./photos/memory-1.jpg" alt="Memory photo 1" width="700" height="1000" loading="lazy">
+            <div class="path-box">Photo path: ./photos/memory-1.jpg</div>
+          </div>
+
+          <div class="gallery-item">
+            <!-- EDIT: Gallery image 2 -->
+            <img src="./photos/memory-2.jpg" alt="Memory photo 2" width="500" height="500" loading="lazy">
+            <div class="path-box">Photo path: ./photos/memory-2.jpg</div>
+          </div>
+
+          <div class="gallery-item">
+            <!-- EDIT: Gallery image 3 -->
+            <img src="./photos/memory-3.jpg" alt="Memory photo 3" width="500" height="500" loading="lazy">
+            <div class="path-box">Photo path: ./photos/memory-3.jpg</div>
+          </div>
+
+          <div class="gallery-item">
+            <!-- EDIT: Gallery image 4 -->
+            <img src="./photos/memory-4.jpg" alt="Memory photo 4" width="500" height="500" loading="lazy">
+            <div class="path-box">Photo path: ./photos/memory-4.jpg</div>
+          </div>
+
+          <div class="gallery-item">
+            <!-- EDIT: Gallery image 5 -->
+            <img src="./photos/memory-5.jpg" alt="Memory photo 5" width="500" height="500" loading="lazy">
+            <div class="path-box">Photo path: ./photos/memory-5.jpg</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container two-col">
+        <article class="mini-card">
+          <span class="tag">Tiny note</span>
+          <!-- EDIT: Change this side message -->
+          <h2>If this feels a little unexpected...</h2>
+          <p>
+            That is fair. I just did not want to keep overthinking forever and say nothing.
+            So this is me being honest in the simplest way I could.
+          </p>
+          <p>
+            You can replace this text with your real story or keep it exactly like this.
+          </p>
+        </article>
+
+        <div class="stack">
+          <article class="mini-card">
+            <!-- EDIT: Change this box -->
+            <h3>Photo tip</h3>
+            <p>If you do not have many photos together, you can use solo photos, campus photos, fest photos, or simple aesthetic pictures too.</p>
+          </article>
+
+          <article class="mini-card">
+            <!-- EDIT: Change this box -->
+            <h3>Better final tone</h3>
+            <p>This version asks her out softly instead of directly asking her to be your girlfriend, which fits a new connection better.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="question">
+      <div class="container">
+        <div class="final-card">
+          <!-- EDIT: Small line above the question -->
+          <div class="sticker">okay, some formalities before coming into proper relationship</div>
+
+          <!-- EDIT: Final intro line -->
+          <p>I know we do not know each other that much yet, but I’d really like the chance to know you better.</p>
+
+          <!-- EDIT: Main final question -->
+          <div class="question">Would you like to go out with me sometime?</div>
+
+          <!-- EDIT: Supporting line -->
+          <p>yes only if you give me kiss😘</p>
+
+          <div class="answer-row">
+            <!-- EDIT: Yes button text -->
+            <button class="answer-btn yes-btn" id="yesBtn">Yes 💖</button>
+
+            <!-- EDIT: Maybe button text -->
+            <button class="answer-btn maybe-btn" id="maybeBtn">yes with lots of love💖</button>
+          </div>
+
+          <div class="result" id="result" aria-live="polite"></div>
+
+          <div class="date-plan">
+            <!-- EDIT: Date planning title -->
+            <h3>If yes, pick a day maybe?</h3>
+
+            <!-- EDIT: Date planning description -->
+            <p>She can choose a date here if she wants to plan a first outing.</p>
+
+            <form class="date-form" id="dateForm">
+              <div class="field">
+                <!-- EDIT: Date input label -->
+                <label for="datePick">Choose a date</label>
+                <input type="date" id="datePick" name="datePick" required>
+              </div>
+
+              <!-- EDIT: Date button text -->
+              <button class="answer-btn yes-btn" type="submit">Save the date</button>
+            </form>
+
+            <div class="date-output" id="dateOutput" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- EDIT: Footer text -->
+  <footer>
+    Made with honesty, effort, and just enough courage to stop overthinking.
+  </footer>
+
+  <script>
+    // EDIT: Get elements
+    const yesBtn = document.getElementById('yesBtn');
+    const maybeBtn = document.getElementById('maybeBtn');
+    const result = document.getElementById('result');
+    const dateForm = document.getElementById('dateForm');
+    const datePick = document.getElementById('datePick');
+    const dateOutput = document.getElementById('dateOutput');
+
+    // EDIT: Set minimum date as today
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    datePick.min = `${yyyy}-${mm}-${dd}`;
+
+    // EDIT: Change yes response here
+    yesBtn.addEventListener('click', () => {
+      result.textContent = 'That made my whole day. You can even pick a date below if you want :)';
+      datePick.focus();
+    });
+
+    // EDIT: Change maybe messages here
+    const maybeMessages = [
+      'NO was never an even option',
+      'I(asmita) will give you(satyam) my whatsapp number',
+      'from today onwords i am only yours',
+      'i am completely in love with you'
+    ];
+
+    let maybeIndex = 0;
+
+    maybeBtn.addEventListener('click', () => {
+      result.textContent = maybeMessages[maybeIndex % maybeMessages.length];
+      maybeIndex += 1;
+    });
+
+    // EDIT: Change saved date message here
+    dateForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (!datePick.value) {
+        dateOutput.textContent = 'Pick a date first, then save it.';
+        return;
+      }
+
+      const picked = new Date(datePick.value + 'T00:00:00');
+      const pretty = picked.toLocaleDateString(undefined, {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      dateOutput.textContent = `Nice — ${pretty} sounds like a lovely day.`;
+    });
+  </script>
+</body>
+</html>
